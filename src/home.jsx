@@ -158,9 +158,11 @@ function Home() {
             Chat
           </Heading>
 
-          <Box  >
+          <Box>
             <Link to="/OBD2List">
-              <Button colorScheme="yellow" color={'white'}>Lista de Codigos</Button>
+              <Button colorScheme="yellow" color={"white"}>
+                Lista de Codigos
+              </Button>
             </Link>
           </Box>
         </HStack>
@@ -263,7 +265,7 @@ function Home() {
                   {errors.problemArea}
                 </FormErrorMessage>
               </FormControl>
-              <HStack mr={1510} spacing={3}>
+              <HStack mr={15} spacing={3}>
                 <Button
                   colorScheme="green"
                   onClick={submitDiagnosis}
