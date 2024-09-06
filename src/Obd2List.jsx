@@ -20,7 +20,7 @@ function OBD2List() {
   useEffect(() => {
     const fetchCodes = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/codes');
+        const response = await axios.get('https://sistema-diagnostico-de-veiculos-backend.onrender.com/codes');
         setCodes(response.data);
       } catch (error) {
         console.error('Erro ao buscar códigos OBD2:', error);

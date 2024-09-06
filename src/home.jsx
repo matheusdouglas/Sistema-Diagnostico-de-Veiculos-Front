@@ -59,7 +59,7 @@ function Home() {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/search_code?code=${code}`,
+        `https://sistema-diagnostico-de-veiculos-backend.onrender.com/search_code?code=${code}`,
         { signal }
       );
       setDescription(response.data.result);
@@ -117,7 +117,7 @@ function Home() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/diagnose",
+        "https://sistema-diagnostico-de-veiculos-backend.onrender.com/diagnose",
         diagnosisData
       );
       setDiagnosticResult(response.data);
