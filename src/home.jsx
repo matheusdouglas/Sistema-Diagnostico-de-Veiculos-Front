@@ -15,7 +15,6 @@ import {
   FormLabel,
   FormErrorMessage,
   Image,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { SearchIcon, CloseIcon } from "@chakra-ui/icons";
 import logo from "./assets/logo.jpeg"; // Atualize o caminho para a sua logo
@@ -33,7 +32,6 @@ function Home() {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const toast = useToast();
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   // AbortController para cancelar a requisição
   const controller = new AbortController();
@@ -81,16 +79,6 @@ function Home() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleClearForm = () => {
-    setComplaint("");
-    setDtcCode("");
-    setSymptoms("");
-    setProblemArea("");
-    setDescription("");
-    setDiagnosticResult(null);
-    setErrors({});
   };
 
   const handleCancel = () => {
