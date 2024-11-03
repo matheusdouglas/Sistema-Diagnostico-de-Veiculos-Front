@@ -26,6 +26,7 @@ import {
 import { SearchIcon, CloseIcon } from "@chakra-ui/icons";
 import logo from "./assets/logo.jpeg"; // Atualize o caminho para a sua logo
 import { Link } from "react-router-dom";
+import jsPDF from "jspdf";
 
 function Home() {
   const [code, setCode] = useState("");
@@ -140,6 +141,21 @@ function Home() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const generatePDF = () => {
+    const pdf = new jsPDF();
+    pdf.setFontSize(12);
+    pdf.text("Diagnóstico OBD2", 10, 10);
+    pdf.text(`Reclamação: ${complaint}`, 10, 20);
+    pdf.text(`Código de Falha: ${dtcCode}`, 10, 30);
+    pdf.text(`Sintomas: ${symptoms}`, 10, 40);
+    pdf.text(`Área do Problema: ${problemArea}`, 10, 50);
+    if (diagnosticResult) {
+      pdf.text(`Método de Diagnóstico: ${diagnosticResult.diagnosis["Método de Diagnóstico"]}`, 10, 60);
+      pdf.text(`Sugestão: ${diagnosticResult.suggestion}`, 10, 70);
+    }
+    pdf.save("diagnostico_obd2.pdf");
   };
 
   return (
@@ -265,71 +281,27 @@ function Home() {
                   {errors.problemArea}
                 </FormErrorMessage>
               </FormControl>
-              <HStack mr={15} spacing={3}>
-                <Button
-                  colorScheme="green"
-                  onClick={submitDiagnosis}
-                  isDisabled={loading}
-                >
-                  {loading ? <Spinner size="sm" /> : "Enviar Diagnóstico"}
-                </Button>
-                <Button
-                  leftIcon={<CloseIcon />}
-                  colorScheme="red"
-                  onClick={onOpen}
-                >
-                  Limpar
-                </Button>
-              </HStack>
-              <Modal isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent>
-                  <ModalHeader>Confirmar Limpeza</ModalHeader>
-                  <ModalBody>
-                    Tem certeza que deseja limpar todos os campos?
-                  </ModalBody>
-                  <ModalFooter>
-                    <Button
-                      colorScheme="red"
-                      onClick={() => {
-                        handleClearForm();
-                        onClose();
-                      }}
-                    >
-                      Sim, Limpar
-                    </Button>
-                    <Button onClick={onClose} spacing={4}>
-                      Cancelar
-                    </Button>
-                  </ModalFooter>
-                </ModalContent>
-              </Modal>
-              {diagnosticResult && (
-                <Box
-                  mt={4}
-                  p={4}
-                  borderWidth="1px"
-                  borderRadius="md"
-                  bg="green.50"
-                  position="relative"
-                >
-                  <Button
-                    position="absolute"
-                    top="4px"
-                    right="4px"
-                    size="xs"
-                    colorScheme="red"
-                    onClick={() => setDiagnosticResult(null)}
-                  >
-                    Fechar
-                  </Button>
-                  <Text fontWeight="bold">Resultado do Diagnóstico:</Text>
-                  <Text>{`Método de Diagnóstico: ${diagnosticResult.diagnosis["Método de Diagnóstico"]}`}</Text>
-                  <Text>{`Sugestão: ${diagnosticResult.suggestion}`}</Text>
-                </Box>
-              )}
+              <Button colorScheme="green" onClick={submitDiagnosis} isDisabled={loading}>
+                {loading ? <Spinner speed="0.65s" /> : "Enviar Diagnóstico"}
+              </Button>
             </VStack>
           </Box>
+
+          {/* Seção para mostrar resultado do diagnóstico */}
+          {diagnosticResult && (
+            <Box p={6} shadow="md" borderWidth="1px" borderRadius="md" bg="white">
+              <Heading as="h2" size="md" mb={4}>
+                Resultado do Diagnóstico
+              </Heading>
+              <Text>
+                Método de Diagnóstico: {diagnosticResult.diagnosis["Método de Diagnóstico"]}
+              </Text>
+              <Text>Sugestão: {diagnosticResult.suggestion}</Text>
+              <Button colorScheme="blue" onClick={generatePDF}>
+                Salvar PDF
+              </Button>
+            </Box>
+          )}
         </VStack>
       </Box>
     </ChakraProvider>
